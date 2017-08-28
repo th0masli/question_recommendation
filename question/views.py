@@ -21,25 +21,39 @@ def get_question(request, interface, key):
         info, k = intfs.choose_interface(post_data, interface)
         if info:
             data['msg'] = 'success'
-            data['code'] = 0
+            data['status'] = 0
             data[k] = info
         else:
             data['msg'] = 'nothing to recommend'
-            data['code'] = 1
+            data['status'] = 1
 
     elif request.method != 'POST':
         data['msg'] = 'method not allowed'
-        data['code'] = 1
+        data['status'] = 1
 
     elif key not in request.FILES:
         data['msg'] = 'invalid key'
-        data['code'] = 1
+        data['status'] = 1
 
     result = json.dumps(data)
 
     return HttpResponse(result)
 
 
-def html(request):
+def rec_html(request):
+    request.encoding = 'utf-8'
+    if request.method == 'POST':
+        post_data = request.FILES.get('file')
+        data = intfs.html(post_data)
 
-    return render(request, 'test.html')
+    return render(request, 'recommend.html', data)
+
+
+def home(request):
+
+    return render(request, 'home.html')
+
+
+def admin(request):
+
+    return HttpResponse("Hello, I am admin. Who are you?")

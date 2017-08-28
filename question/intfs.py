@@ -94,3 +94,12 @@ def clean_question(questions):
         questions_cleaned.append(q)
 
     return questions_cleaned
+
+
+def html(value):
+    text = question_text(value)
+    html_data = recommend(text)
+    html_data = html_data[0]
+    data_info = {'origin': text, 'questions': html_data}
+
+    return data_info

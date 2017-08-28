@@ -19,6 +19,8 @@ from question import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.html),
+    url(r'^$', views.home),
     url(r'get_question/(\D+)/(\D+)', views.get_question),
+    url(r'Easter_Egg', views.admin),
+    url(r'rec_html', views.rec_html)
 ]

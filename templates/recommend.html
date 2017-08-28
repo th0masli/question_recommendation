@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% load static %}
+    
+    <link rel="icon" href="static/img/logo.jpg">
+
+    <title>Starcube</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+	<style type="text/css">
+		body {
+			min-height: 2000px;
+			padding-top: 20px;
+			background-color: #333;
+		}
+		.panel {
+			border: 0;
+			margin-bottom: 0px;
+			border-radius: 0px;
+		}
+		.panel-danger {
+			margin-top: 10px;
+		}
+		nav {
+			text-align: center;
+		}
+		.container-crop {
+			margin-top: 21px;
+		}
+	</style>
+	
+    <script src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript"
+ 		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+    <script>
+        $(document).ready(function() {
+	    	for (var i=1; i<=5; i++)
+  		    {
+  		    	var class_name = 'div.question-' + i.toString();
+  		    	$(class_name).removeClass("hidden");
+  		    }
+	    	$('li.page-1').addClass("disabled");
+
+	    });
+    </script>
+
+  </head>
+	
+  <body>
+ 
+	 <div class="navbar navbar-inverse navbar-fixed-top">
+	 	<div class="container">
+	        <div class="navbar-header">
+	            <a class="navbar-brand" href="/Easter_Egg">Question Recommendation</a>
+	        </div>
+	    </div>
+	</div>
+	
+    <div class="container container-crop">
+    	<div>
+    		{% if file_path %}
+    		<!--<div class="panel panel-danger">
+				<div class="panel-heading">Search Image</div>
+				<div class="panel-body">
+					<img src="{{file_path}}" class="img-responsive center-block"></img>
+				</div>
+			</div>-->
+			<div class="panel panel-info">
+				<div class="panel-heading">OCR Result</div>
+				<div class="panel-body">
+					{{keywords | safe}}
+				</div>
+			</div>
+			{% else %}
+			<div class="panel panel-danger">
+				<div class="panel-heading">Original Question</div>
+				<div class="panel-body">
+					{{origin | safe}}
+				</div>
+			</div>
+			{% endif %}
+		</div>
+		{% if not questions %}
+		<div>
+    		<div class="panel panel-danger">
+				<div class="panel-body">
+					Nothing Found
+				</div>
+			</div>
+		</div>
+		{% endif %}
+        {% for q in questions%}
+    	<div class="question-{{forloop.counter}} hidden">
+            <div class="panel panel-info">
+				<div class="panel-heading">{{forloop.counter}}. Question </div>
+				<div class="panel-body">
+					{{q.question | safe}}
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">Answer</div>
+				<div class="panel-body">
+					{{q.answer | safe}}
+				</div>
+			</div>
+			{% if q.hint %}
+			<div class="panel panel-info">
+				<div class="panel-heading">Analyse</div>
+				<div class="panel-body">
+					{{q.hint | safe}}
+				</div>
+			</div>
+			{% endif %}
+		</div>
+        {% endfor %}
+		
+	</div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="static/js/jquery.min.js"><\/script>')</script>
+    <script src="static/js/bootstrap.min.js"></script>
+  </body>
+</html>
