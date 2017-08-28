@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.home),
     url(r'get_question/(\D+)/(\D+)', views.get_question),
-    url(r'Easter_Egg', views.admin),
-    url(r'rec_html', views.rec_html)
+    url(r'Easter_Egg0', views.star),
+    url(r'Easter_Egg', views.cube),
+    url(r'rec_html', views.rec_html),
 ]

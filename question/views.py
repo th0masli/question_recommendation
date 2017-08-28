@@ -54,6 +54,11 @@ def home(request):
     return render(request, 'home.html')
 
 
-def admin(request):
+def star(request):
 
-    return HttpResponse("Hello, I am admin. Who are you?")
+    return HttpResponse("Hello, I am Star. Who are you?")
+
+
+def cube(request):
+
+    return HttpResponse("Hello, I am Cube!")
