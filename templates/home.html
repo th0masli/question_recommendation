@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home_Page</title>
+    <link rel="stylesheet" href="/static/bootstrap.min.css" type="text/css" />
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <style type="text/css">
+		.col-center-block {
+		    float: none;
+		    display: block;
+		    margin: 0 auto;
+            text-align: center;
+		}
+	</style>
+
+</head>
+<body>
+    <h1 style="align-content: flex-start">Search Question</h1>
+    <form action="/get_question/recommend/file" method="post">
+        <!--<input type="text" name="cropId"/>
+        <input type="submit" value="Go" />-->
+        <input type='file' name='file' size='100' id='uploadimage'class="btn btn-default"/>
+        <input type="submit" value="Go">
+    </form>
+
+</body>
+</html>
