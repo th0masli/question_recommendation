@@ -16,12 +16,17 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from question import views
+from django.contrib.auth import views as auth_views
+from question.forms import LoginForm
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.home),
+    # url(r'^$', views.home),
     url(r'get_question/(\D+)/(\D+)', views.get_question),
     url(r'Easter_Egg0', views.star),
     url(r'Easter_Egg', views.cube),
     url(r'rec_html', views.rec_html),
+    url(r'', include('question.urls')),
+    url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/login'}),
 ]

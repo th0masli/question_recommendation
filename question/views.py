@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 import json
 import intfs
@@ -40,6 +41,7 @@ def get_question(request, interface, key):
     return HttpResponse(result)
 
 
+@login_required(login_url="/login")
 def rec_html(request):
     request.encoding = 'utf-8'
     if request.method == 'POST':
@@ -49,6 +51,7 @@ def rec_html(request):
     return render(request, 'recommend.html', data)
 
 
+@login_required(login_url="/login")
 def home(request):
 
     return render(request, 'home.html')

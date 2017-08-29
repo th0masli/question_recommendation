@@ -50,6 +50,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+# Add this to tell Django where to redirect after
+# successful login
+
+LOGIN_REDIRECT_URL = '/'
+
 ROOT_URLCONF = 'starcube.urls'
 
 TEMPLATES = [
