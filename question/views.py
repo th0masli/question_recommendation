@@ -12,7 +12,7 @@ def query(request):
         return HttpResponse("ip not allowed");
 
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def get_question(request, interface, key):
     data = {}
     request.encoding = 'utf-8'
