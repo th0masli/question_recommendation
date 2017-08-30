@@ -11,6 +11,7 @@ import intfs
 
 # @login_required(login_url='/login')
 def get_question(request, interface, key):
+    bot(request)
     data = {}
     request.encoding = 'utf-8'
     if request.method == 'POST' and key in request.FILES and ip_check(request):
@@ -53,6 +54,7 @@ def get_question(request, interface, key):
 
 @login_required(login_url="/loginh")
 def rec_html(request):
+    bot(request)
     request.encoding = 'utf-8'
     if request.method == 'POST':
         post_data = request.FILES.get('file')
@@ -63,6 +65,7 @@ def rec_html(request):
 
 @login_required(login_url="/loginh")
 def home(request):
+    bot(request)
 
     return render(request, 'home.html')
 
@@ -89,12 +92,19 @@ def login_(request):
 
 
 def ip_check(request):
-    allow_ips = ['10.226.*.*', '10.1.*.*', '10.2.*.*', '10.10.*.*', '127.0.0.1']
+    allow_ips = ['10', '127.0.0.1']
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
         ip = request.META['REMOTE_ADDR']
-    print ip
-    if ip not in allow_ips:
-        return False
-    return True
+    if ip[:2] in allow_ips or ip in allow_ips:
+        return True
+    return False
+
+
+def bot(request):
+    try:
+        anti_bot(request)
+    except Exception, e:
+        if unicode(e) == 'user ip banned.':
+            raise PermissionDenied()

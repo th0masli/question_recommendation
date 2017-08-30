@@ -15,7 +15,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from question import views
+from question import views, robotkiller
 from django.contrib.auth import views as auth_views
 from question.forms import LoginForm
 
