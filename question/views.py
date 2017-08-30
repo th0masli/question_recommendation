@@ -7,13 +7,16 @@ import json
 import intfs
 
 # Create your views here.
+def query(request):
+    if ip_check(request) == False:
+        return HttpResponse("ip not allowed");
 
 
 @login_required(login_url='/login')
 def get_question(request, interface, key):
     data = {}
     request.encoding = 'utf-8'
-    if request.method == 'POST' and key in request.FILES:
+    if request.method == 'POST' and key in request.FILES and ip_check(request):
         if login_(request):
             post_data = request.FILES.get(key)
             '''
@@ -40,6 +43,10 @@ def get_question(request, interface, key):
 
     elif key not in request.FILES:
         data['msg'] = 'invalid key'
+        data['status'] = 1
+
+    elif not ip_check(request):
+        data['msg'] = 'ip not allowed'
         data['status'] = 1
 
     result = json.dumps(data)
@@ -82,3 +89,14 @@ def login_(request):
         return True
     else:
         return False
+
+
+def ip_check(request):
+    allow_ips = ['10.226.*.*', '10.1.*.*']
+    if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+    if ip not in allow_ips:
+        return False
+    return True
