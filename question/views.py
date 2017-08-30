@@ -7,9 +7,6 @@ import json
 import intfs
 
 # Create your views here.
-def query(request):
-    if ip_check(request) == False:
-        return HttpResponse("ip not allowed");
 
 
 # @login_required(login_url='/login')
