@@ -22,11 +22,11 @@ from question.forms import LoginForm
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^$', views.home),
-    url(r'get_question/(\D+)/(\D+)', views.get_question),
+    # url(r'get_question/(\D+)/(\D+)', views.get_question),
+    # url(r'rec_html', views.rec_html),
     url(r'Easter_Egg0', views.star),
     url(r'Easter_Egg', views.cube),
-    url(r'rec_html', views.rec_html),
     url(r'', include('question.urls')),
-    url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': '/login'}),
+    url(r'^loginh/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}, name='login'),
+    url(r'^logouth/$', auth_views.logout, {'next_page': '/loginh'}),
 ]
