@@ -92,7 +92,7 @@ def login_(request):
 
 
 def ip_check(request):
-    allow_ips = ['10', '127.0.0.1']
+    allow_ips = ['10']
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:

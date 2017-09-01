@@ -3,19 +3,9 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <link rel="icon" href="static/img/logo.jpg">
     <title>StarCube</title>
-    <br/>
-    <!--<center><h1 style="align-content: flex-start">Search Question</h1></center>
-    <center><form action="/rec_html" method="post" enctype="multipart/form-data">
-        <div class="row">
-            <input type='file' name='file' size='100' id='uploadimage'class="btn btn-default"/>
-            <input type="submit" value="Go" />
-        </div>
-    </form></center>-->
-    <!--<link href="static/css/style2.min.css" rel="stylesheet">-->
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-    <!--<script src="/static/js/online.js"></script>-->
     <style type="text/css">
         body{background:#E0E0E0}
 		.col-center-block {
@@ -39,22 +29,11 @@
     <div>
         <canvas class="col-center-block" id="cv"></canvas>
         <br/>
-        <!--<button class="col-center-block" id='clear' class="btn btn-default">Clear</button>-->
     </div>
 
     <div class="site-wrapper">
 
       <div class="site-wrapper-inner">
-
-      <!--<div class="navbar navbar-inverse navbar-fixed-top">
-	 	<div class="container">
-	        <div class="navbar-header">
-                <div class="navbar-header">
-	                <a class="navbar-brand" href="/Easter_Egg0">Star</a>
-	            </div>
-	        </div>
-	    </div>
-      </div>-->
 
       <div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="container">
@@ -116,37 +95,5 @@
         }
     </script>
 
-    <!--<script type="text/javascript">
-              function draw(ev) {
-                          console.log(ev);
-
-                          f = document.getElementById("uploadimage").files[0];
-                          url = window.URL || window.webkitURL;
-                          src = url.createObjectURL(f); //create the object url
-                          img = new Image();
-                          img.src = src;
-                          img.onload = function() {
-
-                                url.revokeObjectURL(src); //release the existing object url
-                                var canvas = document.getElementById('cv');
-                                var context = canvas.getContext('2d');
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                                context.drawImage(img, 0, 0);
-
-                          }
-
-                          //$('#clear').click(clr);
-
-              }
-              /*
-              function clr(){
-                draw();
-              }
-              */
-
-              document.getElementById("uploadimage").addEventListener("change", draw, false)
-
-      </script>-->
 </body>
 </html>

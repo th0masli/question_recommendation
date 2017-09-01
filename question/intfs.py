@@ -5,6 +5,7 @@
 import requests
 import json
 import base64
+import re
 
 
 def choose_interface(value, interface):
@@ -12,6 +13,8 @@ def choose_interface(value, interface):
 
     if interface == 'rec':
         return recommend(text)
+    elif interface == 'rec0':
+        return recommend_0(text)
     elif interface == 'des':
         return description(text)
 
@@ -30,7 +33,8 @@ def question_text(value):
         root = json.loads(response.text)
         content = base64.b64decode(root['content'])
         content = json.loads(content)
-        return content['app_content']
+        text = content['app_content']
+        return text
     except Exception, e:
         print str(e)
 
@@ -48,13 +52,27 @@ def recommend(text):
     url = 'http://10.10.63.68:8080/search/query'
 
     try:
-        data = {"task": "matrix", "keywords": text, "limit": "20", "withoutData": "false"}
+        data = {"task": "matrix", "keywords": text, "limit": "30", "withoutData": "false"}
         response = requests.post(url, data=data)
         root = json.loads(response.text)
         questions = root['questions']
         questions_filtered = sim_filter(questions)
         questions_cleaned = clean_question(questions_filtered)
         return questions_cleaned, 'questions'
+    except Exception, e:
+        print str(e)
+
+
+def recommend_0(text):
+
+    url = 'http://10.10.36.200:8001/classification/'
+
+    try:
+        data = json.dumps({'stem': text})
+        response = requests.post(url, data=data)
+        root = response.text
+        print root['classification_result']
+        return root['classification_result'], 'questions'
     except Exception, e:
         print str(e)
 
@@ -78,7 +96,7 @@ def sim_filter(questions):
     for i in range(len(questions)):
         if len(questions_filtered) == 5:
             break
-        elif questions[i]['similarity'] < 50:
+        elif questions[i]['similarity'] < 50 and questions[i]['index_id'] == 0:
             questions_filtered.append(questions[i])
 
     return questions_filtered
@@ -88,7 +106,7 @@ def clean_question(questions):
     questions_cleaned = []
     for j in range(len(questions)):
         q = {}
-        q['question'] = questions[j]['stem_search']
+        q['question'] = questions[j]['stem_html']
         q['answer'] = questions[j]['answer']
         q['hint'] = questions[j]['hint']
         questions_cleaned.append(q)
@@ -100,6 +118,30 @@ def html(value):
     text = question_text(value)
     html_data = recommend(text)
     html_data = html_data[0]
+    print html_data
+    html_data = render_mathquill(html_data)
+    text = re.sub('<tex>', '\(', text)
+    text = re.sub('</tex>', '\)', text)
     data_info = {'origin': text, 'questions': html_data}
 
     return data_info
+
+
+def render_mathquill(data):
+
+    for i in range(len(data)):
+        data[i]['answer'] = sub_math(data[i]['answer'])
+        data[i]['question'] = sub_math(data[i]['question'])
+        data[i]['hint'] = sub_math(data[i]['hint'])
+
+    return data
+
+
+def sub_math(value):
+
+    value = re.sub('<span class="mathquill-embedded-latex">', '<span class="latex">\(', value)
+    value = re.sub('</span>', '\)</span>', value)
+    value = re.sub('&amp;lt;', '<', value)
+    value = re.sub('&amp;gt;', '>', value)
+
+    return value
