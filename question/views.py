@@ -9,7 +9,7 @@ import intfs
 # Create your views here.
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def get_question(request, interface, key):
     bot(request)
     data = {}
@@ -56,7 +56,7 @@ def get_question(request, interface, key):
 def rec_html(request):
     bot(request)
     request.encoding = 'utf-8'
-    if request.method == 'POST':
+    if request.method == 'POST' and ip_check(request):
         post_data = request.FILES.get('file')
         data = intfs.html(post_data)
 
@@ -67,7 +67,9 @@ def rec_html(request):
 def home(request):
     bot(request)
 
-    return render(request, 'home.html')
+    if ip_check(request):
+
+        return render(request, 'home.html')
 
 
 def star(request):
@@ -92,11 +94,13 @@ def login_(request):
 
 
 def ip_check(request):
+    # allow_ips = ['10', '127.0.0.1'] # localhost
     allow_ips = ['10']
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
         ip = request.META['REMOTE_ADDR']
+    # print ip
     if ip[:2] in allow_ips or ip in allow_ips:
         return True
     return False
