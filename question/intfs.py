@@ -118,7 +118,6 @@ def html(value):
     text = question_text(value)
     html_data = recommend(text)
     html_data = html_data[0]
-    print html_data
     html_data = render_mathquill(html_data)
     text = re.sub('<tex>', '\(', text)
     text = re.sub('</tex>', '\)', text)
@@ -143,5 +142,10 @@ def sub_math(value):
     value = re.sub('</span>', '\)</span>', value)
     value = re.sub('&amp;lt;', '<', value)
     value = re.sub('&amp;gt;', '>', value)
+
+    value = \
+        re.sub('/question\_bank',
+               'http://7o4zgy.com2.z0.glb.qiniucdn.com/question_bank',
+               value).strip()
 
     return value
