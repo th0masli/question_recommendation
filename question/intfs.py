@@ -13,7 +13,7 @@ def choose_interface(value, interface):
 
     if interface == 'rec':
         return recommend(text)
-    elif interface == 'rec0':
+    elif interface == 'test':
         return recommend_0(text)
     elif interface == 'des':
         return description(text)
@@ -58,6 +58,7 @@ def recommend(text):
         questions = root['questions']
         questions_filtered = sim_filter(questions)
         questions_cleaned = clean_question(questions_filtered)
+        questions_cleaned = render_mathquill(questions_cleaned)
         return questions_cleaned, 'questions'
     except Exception, e:
         print str(e)
@@ -67,14 +68,29 @@ def recommend_0(text):
 
     url = 'http://10.10.36.200:8001/classification/'
 
+    headers = {
+        'content-type': "application/json",
+        'cache-control': "no-cache",
+    }
+
     try:
         data = json.dumps({'stem': text})
-        response = requests.post(url, data=data)
-        root = response.text
-        print root['classification_result']
-        return root['classification_result'], 'questions'
+        response = requests.post(url, data=data, headers=headers)
+        root = json.loads(response.text)
+        classification = trans_temp(root['classification_result'])
+        return classification, 'questions'
     except Exception, e:
         print str(e)
+
+
+def trans_temp(data):
+    struct_data = []
+    for i in range(len(data)):
+        q = {}
+        q['question'] = data[i]
+        struct_data.append(q)
+    print struct_data
+    return struct_data
 
 
 # call question description api
@@ -116,9 +132,8 @@ def clean_question(questions):
 
 def html(value):
     text = question_text(value)
-    html_data = recommend(text)
-    html_data = html_data[0]
-    html_data = render_mathquill(html_data)
+    html_data = recommend(text)[0] # ver 1.0
+    # html_data = recommend_0(text)[0] # test ver1.1 recommendation
     text = re.sub('<tex>', '\(', text)
     text = re.sub('</tex>', '\)', text)
     data_info = {'origin': text, 'questions': html_data}
@@ -146,6 +161,10 @@ def sub_math(value):
     value = \
         re.sub('/question\_bank',
                'http://7o4zgy.com2.z0.glb.qiniucdn.com/question_bank',
+               value).strip()
+    value = \
+        re.sub('edit',
+               'https://wb-qb-qiniu.xueba100.com/edit',
                value).strip()
 
     return value

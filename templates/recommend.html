@@ -130,12 +130,14 @@
 					{{q.question | safe}}
 				</div>
 			</div>
+            {% if q.answer %}
 			<div class="panel panel-info">
 				<div class="panel-heading">Answer</div>
 				<div class="panel-body">
 					{{q.answer | safe}}
 				</div>
 			</div>
+            {% endif %}
 			{% if q.hint %}
 			<div class="panel panel-info">
 				<div class="panel-heading">Analyse</div>

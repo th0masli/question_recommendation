@@ -9,7 +9,7 @@ import intfs
 # Create your views here.
 
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def get_question(request, interface, key):
     bot(request)
     data = {}
