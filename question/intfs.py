@@ -138,7 +138,7 @@ def html(value):
     text = question_text(value)
     # html_data = recommend(text)[0] # ver 1.0
     # html_data = recommend_0(text)[0] # test ver1.1 recommendation
-    html_data = recommend_conditions(text, 5)[0] # ver1.2
+    html_data = recommend_conditions(text, 5)[0]  # ver1.2
     text = re.sub('<tex>', '\(', text)
     text = re.sub('</tex>', '\)', text)
     data_info = {'origin': text, 'questions': html_data}
@@ -165,14 +165,15 @@ def sub_math(value):
     value = re.sub('&amp;lt;', '<', value)
     value = re.sub('&amp;gt;', '>', value)
 
-    value = \
-        re.sub('/question\_bank',
-               'http://7o4zgy.com2.z0.glb.qiniucdn.com/question_bank',
-               value).strip()
-    value = \
-        re.sub('edit',
-               'https://wb-qb-qiniu.xueba100.com/edit',
-               value).strip()
+    value = re.sub('/question\_bank',
+                   'https://wb-qb-qiniu.xueba100.com/question_bank',
+                   value).strip()
+    value = re.sub('edit',
+                   'https://wb-qb-qiniu.xueba100.com/edit',
+                   value).strip()
+    value = re.sub('/image',
+                   'https://wb-qb-qiniu.xueba100.com/image',
+                   value).strip()
 
     return value
 
