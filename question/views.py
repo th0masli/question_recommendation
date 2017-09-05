@@ -23,7 +23,7 @@ def get_question(request, interface, key):
             #call matrix condition return questions according to question description
             #calculate similarity. Retrieving questions between thresholds
             '''
-            info, k = intfs.choose_interface(post_data, interface)
+            info, k, q = intfs.choose_interface(post_data, interface)
             if info:
                 data['msg'] = 'success'
                 data['status'] = 0

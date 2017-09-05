@@ -6,23 +6,26 @@ import requests
 import json
 import base64
 import re
+import condition_rec as crec
 
 
 def choose_interface(value, interface):
     text = question_text(value)
 
-    if interface == 'rec':
+    if interface == 'old_rec':
         return recommend(text)
-    elif interface == 'test':
-        return recommend_0(text)
+    elif interface == 'rec':
+        return recommend_conditions(text, 5)
     elif interface == 'des':
         return description(text)
+    elif interface == 'test':
+        return recommend_0(text)
 
 
 # call ocr api
 def question_text(value):
 
-    url = 'http://10.10.24.198:9093/api/ocr' # ocr api
+    url = 'http://10.10.24.198:9093/api/ocr'  # ocr api
 
     base64_img = base64.b64encode(value.read())
 
@@ -59,14 +62,20 @@ def recommend(text):
         questions_filtered = sim_filter(questions)
         questions_cleaned = clean_question(questions_filtered)
         questions_cleaned = render_mathquill(questions_cleaned)
-        return questions_cleaned, 'questions'
+        return questions_cleaned, 'questions', questions
     except Exception, e:
         print str(e)
 
 
-def recommend_0(text):
+def recommend_conditions(text, num):
+    questions_cleaned, k, questions = recommend(text)
+    conditions = crec.get_conditions(questions, num)
 
-    url = 'http://10.10.36.200:8001/classification/'
+    if not conditions:
+        # print conditions
+        return questions_cleaned, k, questions
+
+    url = 'http://10.2.1.84:8686/item_point/query_item_by_condition'
 
     headers = {
         'content-type': "application/json",
@@ -74,23 +83,15 @@ def recommend_0(text):
     }
 
     try:
-        data = json.dumps({'stem': text})
+        data = json.dumps({'app_id': 'xbj', 'app_key': 'wenba', 'conditions': conditions})
         response = requests.post(url, data=data, headers=headers)
         root = json.loads(response.text)
-        classification = trans_temp(root['classification_result'])
-        return classification, 'questions'
+        questions = root['items']
+        questions_cleaned = clean_question(questions)
+        questions_cleaned = render_mathquill(questions_cleaned)
+        return questions_cleaned, 'questions', questions
     except Exception, e:
         print str(e)
-
-
-def trans_temp(data):
-    struct_data = []
-    for i in range(len(data)):
-        q = {}
-        q['question'] = data[i]
-        struct_data.append(q)
-    print struct_data
-    return struct_data
 
 
 # call question description api
@@ -122,7 +123,10 @@ def clean_question(questions):
     questions_cleaned = []
     for j in range(len(questions)):
         q = {}
-        q['question'] = questions[j]['stem_html']
+        if 'stem_html' in questions[j]:
+            q['question'] = questions[j]['stem_html']
+        elif 'item_content' in questions[j]:
+            q['question'] = questions[j]['item_content']
         q['answer'] = questions[j]['answer']
         q['hint'] = questions[j]['hint']
         questions_cleaned.append(q)
@@ -132,8 +136,9 @@ def clean_question(questions):
 
 def html(value):
     text = question_text(value)
-    html_data = recommend(text)[0] # ver 1.0
+    # html_data = recommend(text)[0] # ver 1.0
     # html_data = recommend_0(text)[0] # test ver1.1 recommendation
+    html_data = recommend_conditions(text, 5)[0] # ver1.2
     text = re.sub('<tex>', '\(', text)
     text = re.sub('</tex>', '\)', text)
     data_info = {'origin': text, 'questions': html_data}
@@ -153,8 +158,10 @@ def render_mathquill(data):
 
 def sub_math(value):
 
-    value = re.sub('<span class="mathquill-embedded-latex">', '<span class="latex">\(', value)
-    value = re.sub('</span>', '\)</span>', value)
+    if 'mathquill' in value:
+        value = re.sub('<span class="mathquill-embedded-latex">', '<span class="latex">\(', value)
+        value = re.sub('</span>', '\)</span>', value)
+
     value = re.sub('&amp;lt;', '<', value)
     value = re.sub('&amp;gt;', '>', value)
 
@@ -168,3 +175,32 @@ def sub_math(value):
                value).strip()
 
     return value
+
+
+def recommend_0(text):
+
+    url = 'http://10.10.36.200:8001/classification/'
+
+    headers = {
+        'content-type': "application/json",
+        'cache-control': "no-cache",
+    }
+
+    try:
+        data = json.dumps({'stem': text})
+        response = requests.post(url, data=data, headers=headers)
+        root = json.loads(response.text)
+        classification = trans_temp(root['classification_result'])
+        return classification, 'questions', root
+    except Exception, e:
+        print str(e)
+
+
+def trans_temp(data):
+    struct_data = []
+    for i in range(len(data)):
+        q = {}
+        q['question'] = data[i]
+        struct_data.append(q)
+    print struct_data
+    return struct_data
