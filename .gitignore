@@ -8,3 +8,4 @@ build
 
 # My configurations:
 db.sqlite3
+manage.py
