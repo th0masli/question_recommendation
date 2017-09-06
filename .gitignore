@@ -1,0 +1,10 @@
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+*.pyc
+dist
+build
+
+# My configurations:
+db.sqlite3

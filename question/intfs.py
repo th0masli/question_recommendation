@@ -61,8 +61,8 @@ def recommend(text):
         questions = root['questions']
         questions_filtered = sim_filter(questions)
         questions_cleaned = clean_question(questions_filtered)
-        questions_cleaned = render_mathquill(questions_cleaned)
-        return questions_cleaned, 'questions', questions
+        questions_cleaned = render_math(questions_cleaned)
+        return questions_cleaned, 'questions', questions  # 3rd is raw questions
     except Exception, e:
         print str(e)
 
@@ -72,7 +72,6 @@ def recommend_conditions(text, num):
     conditions = crec.get_conditions(questions, num)
 
     if not conditions:
-        # print conditions
         return questions_cleaned, k, questions
 
     url = 'http://10.2.1.84:8686/item_point/query_item_by_condition'
@@ -88,7 +87,7 @@ def recommend_conditions(text, num):
         root = json.loads(response.text)
         questions = root['items']
         questions_cleaned = clean_question(questions)
-        questions_cleaned = render_mathquill(questions_cleaned)
+        questions_cleaned = render_math(questions_cleaned)
         return questions_cleaned, 'questions', questions
     except Exception, e:
         print str(e)
@@ -108,8 +107,9 @@ def description(text):
         print str(e)
 
 
+# similarity filter
 def sim_filter(questions):
-    questions_filtered = []  # similarity filter
+    questions_filtered = []
     for i in range(len(questions)):
         if len(questions_filtered) == 5:
             break
@@ -146,7 +146,7 @@ def html(value):
     return data_info
 
 
-def render_mathquill(data):
+def render_math(data):
 
     for i in range(len(data)):
         data[i]['answer'] = sub_math(data[i]['answer'])
@@ -164,6 +164,7 @@ def sub_math(value):
 
     value = re.sub('&amp;lt;', '<', value)
     value = re.sub('&amp;gt;', '>', value)
+    value = re.sub('number', '', value)
 
     value = re.sub('/question\_bank',
                    'https://wb-qb-qiniu.xueba100.com/question_bank',
@@ -203,5 +204,4 @@ def trans_temp(data):
         q = {}
         q['question'] = data[i]
         struct_data.append(q)
-    print struct_data
     return struct_data

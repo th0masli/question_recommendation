@@ -8,5 +8,6 @@ class RobotKiller(models.Model):
     ip = models.CharField(max_length=16)    # ip
     visits = models.IntegerField()          # request times
     time = models.DateTimeField()           # request begin time
+    status = models.CharField(max_length=16)
     class Meta:
-        db_table = 'db.sqlite3'
+        db_table = 'robot'

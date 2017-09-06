@@ -1,9 +1,6 @@
 # coding=utf-8
 
 
-import json
-
-
 def get_conditions(questions, n):
     questions.sort(key=lambda x: x["similarity"], reverse=True)
     if questions[0]["similarity"] < 50:
@@ -30,8 +27,6 @@ def get_conditions(questions, n):
             continue
         elif question["subject"] != 0:
             subject = question["subject"]
-        else:
-            subject = 0
 
     conditions = {"difficulty": difficulty, "point_id": point_id, "teach_item_type": teach_item_type, \
              "num": num, "black": black, "subject": subject}
