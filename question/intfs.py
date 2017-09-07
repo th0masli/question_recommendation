@@ -7,6 +7,7 @@ import json
 import base64
 import re
 import condition_rec as crec
+import random
 
 
 def choose_interface(value, interface):
@@ -55,7 +56,7 @@ def recommend(text):
     url = 'http://10.10.63.68:8080/search/query'
 
     try:
-        data = {"task": "matrix", "keywords": text, "limit": "30", "withoutData": "false"}
+        data = {"task": "matrix", "keywords": text, "limit": "35", "withoutData": "false"}
         response = requests.post(url, data=data)
         root = json.loads(response.text)
         questions = root['questions']
@@ -72,6 +73,7 @@ def recommend_conditions(text, num):
     conditions = crec.get_conditions(questions, num)
 
     if not conditions:
+        random.shuffle(questions_cleaned)
         return questions_cleaned, k, questions
 
     url = 'http://10.2.1.84:8686/item_point/query_item_by_condition'
@@ -86,6 +88,7 @@ def recommend_conditions(text, num):
         response = requests.post(url, data=data, headers=headers)
         root = json.loads(response.text)
         questions = root['items']
+        random.shuffle(questions)
         questions_cleaned = clean_question(questions)
         questions_cleaned = render_math(questions_cleaned)
         return questions_cleaned, 'questions', questions
@@ -102,18 +105,19 @@ def description(text):
         data = json.dumps({'stem': text})
         response = requests.post(url, data=data)
         root = json.loads(response.text)
-        return root['ret'], 'label'
+        return root['ret'], 'label', root
     except Exception, e:
         print str(e)
 
 
 # similarity filter
 def sim_filter(questions):
+    random.shuffle(questions)
     questions_filtered = []
     for i in range(len(questions)):
         if len(questions_filtered) == 5:
             break
-        elif questions[i]['similarity'] < 50 and questions[i]['index_id'] == 0:
+        elif questions[i]['similarity'] <= 35 and questions[i]['index_id'] == 0:
             questions_filtered.append(questions[i])
 
     return questions_filtered
@@ -161,6 +165,7 @@ def sub_math(value):
     if 'mathquill' in value:
         value = re.sub('<span class="mathquill-embedded-latex">', '<span class="latex">\(', value)
         value = re.sub('</span>', '\)</span>', value)
+        value = re.sub('>/\)<', '><', value)
 
     value = re.sub('&amp;lt;', '<', value)
     value = re.sub('&amp;gt;', '>', value)

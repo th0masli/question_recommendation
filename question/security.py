@@ -7,8 +7,8 @@ min_seconds = 300
 
 
 def ip_bot_filter(request):
-    allowed_ips = ['10', '127.0.0.1']  # localhost
-    # allowed_ips = ['10', '60.205.107.184']
+    # allowed_ips = ['10', '127.0.0.1']  # localhost
+    allowed_ips = ['10', '60.205.107.184', '211.144.0.55']
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         request_ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
