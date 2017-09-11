@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 import json
 import intfs
 import security
+from galaxy import views as gviews
 
 # Create your views here.
 
@@ -20,7 +21,8 @@ def get_question(request, interface, key):
     if request.method == 'POST' and key in request.FILES:
         if login_(request):
             post_data = request.FILES.get(key)
-            info, k, q = intfs.choose_interface(post_data, interface)
+            info, k, q, ids = intfs.choose_interface(post_data, interface)
+            gviews.user_galaxy(request, ids)
             if info:
                 data['msg'] = 'success'
                 data['status'] = 0
@@ -53,7 +55,8 @@ def rec_html(request):
     request.encoding = 'utf-8'
     if request.method == 'POST':
         post_data = request.FILES.get('file')
-        data = intfs.html(post_data)
+        data, ids = intfs.html(post_data)
+        gviews.user_galaxy(request, ids)
 
     return render(request, 'recommend.html', data)
 

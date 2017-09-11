@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'question',
-    # 'robotkiller',
+    'galaxy',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -87,7 +87,24 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
+    'galaxy': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'star_cube',
+        'HOST': '10.10.45.211',
+        'PORT': '3306',
+        'USER': 'wenba',
+        'PASSWORD': 'Ib5mvmxbrIgsjjhcOhx7m39agrvPpxlr',
+    },
 }
+
+DATABASE_ROUTERS = ['galaxy.router.db_router']
+
+'''
+DATABASES_APPS_MAPPING = {
+    'question': 'default',
+    'galaxy': 'galaxy',
+}
+'''
 
 
 # password validations

@@ -9,5 +9,10 @@ class RobotKiller(models.Model):
     visits = models.IntegerField()          # request times
     time = models.DateTimeField()           # request begin time
     status = models.CharField(max_length=16)
+
     class Meta:
         db_table = 'robot'
+        app_label = 'question'  # using default database
+
+
+
