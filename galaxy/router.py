@@ -41,7 +41,8 @@ class db_router(object):
         if app_label == 'galaxy':
             return db == 'galaxy'
         elif app_label == 'question':
-            return False
+            return db == 'default'
+
         return None
 
     def allow_syncdb(self, db, model):

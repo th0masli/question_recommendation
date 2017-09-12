@@ -9,3 +9,4 @@ build
 # My configurations:
 db.sqlite3
 nohup.out
+img_cache

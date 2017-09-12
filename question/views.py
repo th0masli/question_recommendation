@@ -3,6 +3,8 @@ from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.core.exceptions import PermissionDenied
+import os
 
 import json
 import intfs
@@ -14,15 +16,17 @@ from galaxy import views as gviews
 
 # @login_required(login_url='/login')
 def get_question(request, interface, key):
-    if not security.ip_bot_filter(request):
-        return HttpResponseForbidden()
+    #if not security.ip_bot_filter(request):
+        #return HttpResponseForbidden()
+    sec_filter(request)
     data = {}
     request.encoding = 'utf-8'
     if request.method == 'POST' and key in request.FILES:
         if login_(request):
             post_data = request.FILES.get(key)
-            info, k, q, ids = intfs.choose_interface(post_data, interface)
-            gviews.user_galaxy(request, ids)
+            file_name, file_data = post_data.name, post_data.read()
+            info, k, q, ids = intfs.choose_interface(file_data, interface)
+            gviews.user_galaxy(request, file_name, file_data, ids)
             if info:
                 data['msg'] = 'success'
                 data['status'] = 0
@@ -49,22 +53,25 @@ def get_question(request, interface, key):
 
 @login_required(login_url="/loginh")
 def rec_html(request):
-    if not security.ip_bot_filter(request):
-        return HttpResponseForbidden()
+    #if not security.ip_bot_filter(request):
+        #return HttpResponseForbidden()
+    sec_filter(request)
 
     request.encoding = 'utf-8'
     if request.method == 'POST':
         post_data = request.FILES.get('file')
-        data, ids = intfs.html(post_data)
-        gviews.user_galaxy(request, ids)
+        file_name, file_data = post_data.name, post_data.read()
+        data, ids = intfs.html(file_data)
+        gviews.user_galaxy(request, file_name, file_data, ids)
 
     return render(request, 'recommend.html', data)
 
 
 @login_required(login_url="/loginh")
 def home(request):
-    if not security.ip_bot_filter(request):
-        return HttpResponseForbidden()
+    #if not security.ip_bot_filter(request):
+        #return HttpResponseForbidden()
+    sec_filter(request)
 
     return render(request, 'home.html')
 
@@ -78,6 +85,13 @@ def login_(request):
         return True
     else:
         return False
+
+
+def sec_filter(request):
+    try:
+        security.ip_bot_filter(request)
+    except Exception:
+        raise PermissionDenied
 
 
 def star(request):

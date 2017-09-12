@@ -1,14 +1,14 @@
 from models import RobotKiller
 from django.utils import timezone
-
+from django.core.exceptions import PermissionDenied
 
 max_visits = 100
 min_seconds = 300
 
 
 def ip_bot_filter(request):
-    #allowed_ips = ['10', '127.0.0.1']  # localhost
-    allowed_ips = ['10', '60.205.107.184', '211.144.0.55']
+    allowed_ips = ['10', '127.0.0.1']  # localhost
+    #allowed_ips = ['10', '60.205.107.184', '211.144.0.55']
     if request.META.has_key('HTTP_X_FORWARDED_FOR'):
         request_ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
@@ -25,7 +25,8 @@ def ip_bot_filter(request):
 
         if record.visits > max_visits and passed_seconds < min_seconds and record.status == 'banned':
             record.status = 'banned'
-            return False
+            #return False
+            raise Exception
         else:
             if passed_seconds < min_seconds:
                 record.visits = record.visits + 1
@@ -34,8 +35,8 @@ def ip_bot_filter(request):
                 record.visits = 1
                 record.time = timezone.now()
                 record.save()
-            return True
+            #return True
     else:
-        return False
-
+        #return False
+        raise Exception
 

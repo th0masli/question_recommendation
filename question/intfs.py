@@ -29,7 +29,7 @@ def question_text(value):
 
     url = 'http://10.10.24.198:9093/api/ocr'  # ocr api
 
-    base64_img = base64.b64encode(value.read())
+    base64_img = base64.b64encode(value)
 
     try:
         data = json.dumps({'subject': 1, 'image_data': base64_img, "with_question_segment": False,
