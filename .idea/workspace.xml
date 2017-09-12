@@ -3,14 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="e6e5b2f7-f07a-4d4d-98d1-fb197c8d685c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/galaxy/router.py" afterPath="$PROJECT_DIR$/galaxy/router.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/galaxy/views.py" afterPath="$PROJECT_DIR$/galaxy/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/question/intfs.py" afterPath="$PROJECT_DIR$/question/intfs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/question/security.py" afterPath="$PROJECT_DIR$/question/security.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/question/urls.py" afterPath="$PROJECT_DIR$/question/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/question/views.py" afterPath="$PROJECT_DIR$/question/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/starcube/settings.py" afterPath="$PROJECT_DIR$/starcube/settings.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -40,8 +32,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" column="20" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+            <state relative-caret-position="228">
+              <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -896,8 +888,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="8" column="20" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+        <state relative-caret-position="228">
+          <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
           <folding />
         </state>
       </provider>
